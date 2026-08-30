@@ -1,0 +1,46 @@
+version: '3.8'
+
+services:
+  redis:
+    image: redis:7-alpine
+    container_name: payflowx-redis
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+    restart: always
+
+  postgres:
+    image: postgres:15-alpine
+    container_name: payflowx-postgres
+    ports:
+      - "5433:5432" # Maps container port 5432 to host port 5433 to avoid local conflicts
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=root
+      - POSTGRES_DB=payflowx
+    volumes:
+      - pg_data:/var/lib/postgresql/data
+    restart: always
+
+  prometheus:
+    image: prom/prometheus:latest
+    container_name: payflowx-prometheus
+    volumes:
+      - ./docker/prometheus.yml:/etc/prometheus/prometheus.yml
+    ports:
+      - "9090:9090"
+    restart: always
+
+  grafana:
+    image: grafana/grafana:latest
+    container_name: payflowx-grafana
+    ports:
+      - "3001:3000"
+    environment:
+      - GF_SECURITY_ADMIN_PASSWORD=admin
+    restart: always
+
+volumes:
+  redis_data:
+  pg_data:
