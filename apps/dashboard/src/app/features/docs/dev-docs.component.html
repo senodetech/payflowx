@@ -1,0 +1,175 @@
+<div class="space-y-10 max-w-6xl">
+  <!-- Header -->
+  <div class="border-b border-slate-200 pb-6">
+    <div class="flex items-center gap-3">
+      <h1 class="text-3xl font-extrabold text-slate-800">Developer Documentation & API Reference</h1>
+      <span class="bg-brand-50 text-brand-700 text-xs font-bold px-3 py-1 rounded-full uppercase tracking-wider border border-brand-200">
+        v1.0.0 Monolith API
+      </span>
+    </div>
+    <p class="text-slate-500 text-base mt-2">
+      Everything you need to integrate PayFlowX into your web applications, e-commerce platforms, and backend services.
+    </p>
+  </div>
+
+  <!-- Quick Nav Tabs / Jump Links -->
+  <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+    <a href="#authentication" class="p-4 bg-white border border-slate-200 rounded-xl hover:border-brand-500 transition-colors shadow-sm">
+      <div class="text-xs font-bold uppercase text-brand-600">1. Security</div>
+      <div class="font-bold text-slate-800 text-sm mt-1">Authentication & Keys</div>
+    </a>
+    <a href="#payments-api" class="p-4 bg-white border border-slate-200 rounded-xl hover:border-brand-500 transition-colors shadow-sm">
+      <div class="text-xs font-bold uppercase text-brand-600">2. Processing</div>
+      <div class="font-bold text-slate-800 text-sm mt-1">Payment Intents & Cards</div>
+    </a>
+    <a href="#test-cards" class="p-4 bg-white border border-slate-200 rounded-xl hover:border-brand-500 transition-colors shadow-sm">
+      <div class="text-xs font-bold uppercase text-brand-600">3. Sandbox</div>
+      <div class="font-bold text-slate-800 text-sm mt-1">Test Card Matrix</div>
+    </a>
+    <a href="#webhooks" class="p-4 bg-white border border-slate-200 rounded-xl hover:border-brand-500 transition-colors shadow-sm">
+      <div class="text-xs font-bold uppercase text-brand-600">4. Events</div>
+      <div class="font-bold text-slate-800 text-sm mt-1">HMAC Webhooks</div>
+    </a>
+  </div>
+
+  <!-- Section 1: Authentication -->
+  <section id="authentication" class="space-y-4 pt-4">
+    <div class="flex items-center gap-2">
+      <span class="w-8 h-8 rounded-lg bg-slate-900 text-white flex items-center justify-center font-bold text-sm">1</span>
+      <h2 class="text-xl font-bold text-slate-800">Authentication & API Keys</h2>
+    </div>
+    <p class="text-slate-600 text-sm leading-relaxed">
+      PayFlowX uses API keys to authenticate requests. Authenticate all server-side API requests by providing your secret key in the <code class="bg-slate-100 text-slate-800 px-1.5 py-0.5 rounded font-mono text-xs">Authorization</code> header.
+    </p>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+      <div class="bg-white p-5 rounded-xl border border-slate-200 shadow-sm space-y-2">
+        <div class="flex items-center justify-between">
+          <span class="text-xs font-bold uppercase text-slate-400">Publishable Key</span>
+          <span class="text-2xs bg-green-50 text-green-700 px-2 py-0.5 rounded-full font-bold">Client-Safe</span>
+        </div>
+        <div class="font-mono text-xs text-slate-700 bg-slate-50 p-2.5 rounded-lg border border-slate-100 break-all">
+          pk_live_948f2a1b7c3d4e5f6a7b8c9d0e1f2a3b
+        </div>
+        <p class="text-slate-500 text-xs">Used in frontend web forms and mobile SDKs to safely tokenize payment methods without exposing cardholder data.</p>
+      </div>
+
+      <div class="bg-white p-5 rounded-xl border border-slate-200 shadow-sm space-y-2">
+        <div class="flex items-center justify-between">
+          <span class="text-xs font-bold uppercase text-slate-400">Secret Key</span>
+          <span class="text-2xs bg-red-50 text-red-700 px-2 py-0.5 rounded-full font-bold">Confidential</span>
+        </div>
+        <div class="font-mono text-xs text-slate-700 bg-slate-50 p-2.5 rounded-lg border border-slate-100 break-all">
+          sk_live_58c2b4d9e1f0a3b7c6d8e9f1a2b3c4d5
+        </div>
+        <p class="text-slate-500 text-xs">Used exclusively in your backend application servers to charge cards, execute refunds, and access balance ledgers.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Section 2: Payments API & Code Examples -->
+  <section id="payments-api" class="space-y-6 pt-4">
+    <div class="flex items-center gap-2">
+      <span class="w-8 h-8 rounded-lg bg-slate-900 text-white flex items-center justify-center font-bold text-sm">2</span>
+      <h2 class="text-xl font-bold text-slate-800">Processing Payments</h2>
+    </div>
+
+    <!-- Code Switcher Box -->
+    <div class="bg-slate-900 rounded-xl overflow-hidden shadow-lg border border-slate-800">
+      <div class="flex items-center justify-between px-4 py-3 bg-slate-800 border-b border-slate-700">
+        <div class="flex items-center gap-2">
+          <button
+            (click)="selectedLanguage = 'curl'"
+            [class]="selectedLanguage === 'curl' ? 'bg-brand-600 text-white' : 'text-slate-400 hover:text-white'"
+            class="px-3 py-1 rounded text-xs font-semibold transition-colors"
+          >
+            cURL
+          </button>
+          <button
+            (click)="selectedLanguage = 'node'"
+            [class]="selectedLanguage === 'node' ? 'bg-brand-600 text-white' : 'text-slate-400 hover:text-white'"
+            class="px-3 py-1 rounded text-xs font-semibold transition-colors"
+          >
+            Node.js / TypeScript
+          </button>
+          <button
+            (click)="selectedLanguage = 'python'"
+            [class]="selectedLanguage === 'python' ? 'bg-brand-600 text-white' : 'text-slate-400 hover:text-white'"
+            class="px-3 py-1 rounded text-xs font-semibold transition-colors"
+          >
+            Python
+          </button>
+        </div>
+        <span class="text-2xs text-slate-400 font-mono">POST /api/v1/payments</span>
+      </div>
+
+      <!-- cURL Block -->
+      <pre *ngIf="selectedLanguage === 'curl'" class="p-5 text-xs font-mono text-emerald-400 overflow-x-auto leading-relaxed"><code>{{ curlSnippet }}</code></pre>
+
+      <!-- Node.js Block -->
+      <pre *ngIf="selectedLanguage === 'node'" class="p-5 text-xs font-mono text-emerald-400 overflow-x-auto leading-relaxed"><code>{{ nodeSnippet }}</code></pre>
+
+      <!-- Python Block -->
+      <pre *ngIf="selectedLanguage === 'python'" class="p-5 text-xs font-mono text-emerald-400 overflow-x-auto leading-relaxed"><code>{{ pythonSnippet }}</code></pre>
+    </div>
+  </section>
+
+  <!-- Section 3: Sandbox Test Cards -->
+  <section id="test-cards" class="space-y-4 pt-4">
+    <div class="flex items-center gap-2">
+      <span class="w-8 h-8 rounded-lg bg-slate-900 text-white flex items-center justify-center font-bold text-sm">3</span>
+      <h2 class="text-xl font-bold text-slate-800">Sandbox Test Cards</h2>
+    </div>
+    <p class="text-slate-600 text-sm">
+      Use any of the following simulated card numbers to test various transaction outcomes in development mode:
+    </p>
+
+    <div class="bg-white rounded-xl border border-slate-200 overflow-hidden shadow-sm">
+      <table class="w-full text-left border-collapse text-sm">
+        <thead>
+          <tr class="bg-slate-50 border-b border-slate-200 text-xs font-semibold uppercase text-slate-400">
+            <th class="py-3 px-5">Card Number</th>
+            <th class="py-3 px-5">Expiration & CVC</th>
+            <th class="py-3 px-5">Expected Outcome</th>
+            <th class="py-3 px-5">Simulated Code</th>
+          </tr>
+        </thead>
+        <tbody class="divide-y divide-slate-100 text-slate-700 font-mono text-xs">
+          <tr>
+            <td class="py-3 px-5 font-bold text-slate-900">4242 4242 4242 4242</td>
+            <td class="py-3 px-5">Any future date / Any 3 digits</td>
+            <td class="py-3 px-5 text-emerald-600 font-sans font-bold">SUCCEEDED (Approved)</td>
+            <td class="py-3 px-5 text-slate-500">200 OK</td>
+          </tr>
+          <tr>
+            <td class="py-3 px-5 font-bold text-slate-900">4000 0000 0000 5555</td>
+            <td class="py-3 px-5">Any future date / Any 3 digits</td>
+            <td class="py-3 px-5 text-red-600 font-sans font-bold">FAILED (Card Declined)</td>
+            <td class="py-3 px-5 text-slate-500">400 Bad Request</td>
+          </tr>
+          <tr>
+            <td class="py-3 px-5 font-bold text-slate-900">4000 0000 0000 9999</td>
+            <td class="py-3 px-5">Any future date / Any 3 digits</td>
+            <td class="py-3 px-5 text-amber-600 font-sans font-bold">FAILED (Suspected Fraud)</td>
+            <td class="py-3 px-5 text-slate-500">402 Payment Required</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- Section 4: Webhooks -->
+  <section id="webhooks" class="space-y-4 pt-4">
+    <div class="flex items-center gap-2">
+      <span class="w-8 h-8 rounded-lg bg-slate-900 text-white flex items-center justify-center font-bold text-sm">4</span>
+      <h2 class="text-xl font-bold text-slate-800">Webhook Signatures & Verification</h2>
+    </div>
+    <p class="text-slate-600 text-sm leading-relaxed">
+      PayFlowX signs webhook events sent to your endpoints with an HMAC-SHA256 signature included in the <code class="bg-slate-100 text-slate-800 px-1.5 py-0.5 rounded font-mono text-xs">x-payflowx-signature</code> header.
+    </p>
+
+    <div class="bg-slate-900 p-5 rounded-xl border border-slate-800 text-xs font-mono text-emerald-400 overflow-x-auto leading-relaxed">
+      <pre><code>{{ webhookSnippet }}</code></pre>
+    </div>
+  </section>
+</div>
