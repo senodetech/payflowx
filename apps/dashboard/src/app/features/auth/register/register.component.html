@@ -1,0 +1,70 @@
+<div class="min-h-screen flex items-center justify-center bg-slate-50 px-4">
+  <div class="max-w-md w-full bg-white rounded-xl shadow-lg border border-slate-100 p-8">
+    <div class="text-center mb-8">
+      <h2 class="text-3xl font-extrabold text-brand-600 tracking-tight">PayFlowX</h2>
+      <p class="text-slate-500 mt-2 text-sm">Register your merchant account and begin accepting payments.</p>
+    </div>
+
+    <form [formGroup]="registerForm" (ngSubmit)="onSubmit()" class="space-y-5">
+      <div>
+        <label class="block text-xs font-semibold uppercase text-slate-500 tracking-wider mb-2">Merchant/Business Name</label>
+        <input
+          type="text"
+          formControlName="merchantName"
+          class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-lg text-slate-800 placeholder-slate-400 focus:outline-none focus:border-brand-500 focus:bg-white transition-colors"
+          placeholder="Acme Corporation"
+        />
+        <div *ngIf="registerForm.get('merchantName')?.touched && registerForm.get('merchantName')?.invalid" class="text-red-500 text-xs mt-1">
+          Merchant name is required.
+        </div>
+      </div>
+
+      <div>
+        <label class="block text-xs font-semibold uppercase text-slate-500 tracking-wider mb-2">Email Address</label>
+        <input
+          type="email"
+          formControlName="email"
+          class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-lg text-slate-800 placeholder-slate-400 focus:outline-none focus:border-brand-500 focus:bg-white transition-colors"
+          placeholder="you@acme.com"
+        />
+        <div *ngIf="registerForm.get('email')?.touched && registerForm.get('email')?.invalid" class="text-red-500 text-xs mt-1">
+          Please enter a valid email.
+        </div>
+      </div>
+
+      <div>
+        <label class="block text-xs font-semibold uppercase text-slate-500 tracking-wider mb-2">Password</label>
+        <input
+          type="password"
+          formControlName="password"
+          class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-lg text-slate-800 placeholder-slate-400 focus:outline-none focus:border-brand-500 focus:bg-white transition-colors"
+          placeholder="••••••••"
+        />
+        <div *ngIf="registerForm.get('password')?.touched && registerForm.get('password')?.invalid" class="text-red-500 text-xs mt-1">
+          Password must be at least 8 characters long.
+        </div>
+      </div>
+
+      <div *ngIf="successMessage" class="p-3 bg-green-50 text-green-700 text-sm rounded-lg border border-green-100">
+        {{ successMessage }}
+      </div>
+
+      <div *ngIf="errorMessage" class="p-3 bg-red-50 text-red-600 text-sm rounded-lg border border-red-100">
+        {{ errorMessage }}
+      </div>
+
+      <button
+        type="submit"
+        [disabled]="registerForm.invalid || isSubmitting"
+        class="w-full py-3 px-4 bg-brand-600 hover:bg-brand-700 text-white font-semibold rounded-lg shadow-md transition-colors disabled:opacity-50"
+      >
+        {{ isSubmitting ? 'Registering...' : 'Create Account' }}
+      </button>
+    </form>
+
+    <div class="text-center mt-6 text-sm text-slate-500">
+      Already have an account? 
+      <a routerLink="/login" class="text-brand-500 hover:underline font-medium">Sign in</a>
+    </div>
+  </div>
+</div>
