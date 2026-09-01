@@ -1,0 +1,217 @@
+<div class="space-y-6">
+  <!-- Title Header -->
+  <div class="flex items-center justify-between">
+    <div>
+      <h1 class="text-2xl font-bold text-slate-800">Payments</h1>
+      <p class="text-slate-500 text-sm mt-1">Accept cards, view intents, and execute refunds.</p>
+    </div>
+    <button
+      (click)="showCreateModal = true"
+      class="bg-brand-600 hover:bg-brand-700 text-white font-semibold px-4 py-2.5 rounded-lg shadow-sm transition-colors"
+    >
+      Create Charge
+    </button>
+  </div>
+
+  <!-- Payments Table Card -->
+  <div class="bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden">
+    <div class="overflow-x-auto">
+      <table class="w-full text-left border-collapse">
+        <thead>
+          <tr class="bg-slate-50 border-b border-slate-200 text-xs font-semibold uppercase text-slate-400 tracking-wider">
+            <th class="py-4 px-6">Payment ID</th>
+            <th class="py-4 px-6">Amount</th>
+            <th class="py-4 px-6">Currency</th>
+            <th class="py-4 px-6">Status</th>
+            <th class="py-4 px-6">Created At</th>
+            <th class="py-4 px-6 text-right">Actions</th>
+          </tr>
+        </thead>
+        <tbody class="divide-y divide-slate-100 text-sm">
+          <tr *ngFor="let payment of store.payments()" class="hover:bg-slate-50/55 transition-colors text-slate-700">
+            <td class="py-4 px-6 font-mono text-xs">{{ payment.id }}</td>
+            <td class="py-4 px-6 font-semibold">{{ payment.amount | number: '1.2-2' }}</td>
+            <td class="py-4 px-6 uppercase">{{ payment.currency }}</td>
+            <td class="py-4 px-6">
+              <span
+                [class]="getStatusClass(payment.status)"
+                class="px-2.5 py-1 text-xs font-semibold rounded-full uppercase"
+              >
+                {{ payment.status }}
+              </span>
+            </td>
+            <td class="py-4 px-6 text-slate-400">
+              {{ payment.createdAt | date: 'medium' }}
+            </td>
+            <td class="py-4 px-6 text-right">
+              <button
+                *ngIf="payment.status === 'SUCCEEDED'"
+                (click)="openRefundModal(payment)"
+                class="text-xs font-bold text-brand-600 hover:text-brand-700 hover:underline"
+              >
+                Refund
+              </button>
+            </td>
+          </tr>
+
+          <tr *ngIf="store.payments().length === 0">
+            <td colspan="6" class="text-center py-8 text-slate-400 font-medium">
+              No payment transactions found.
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- Create Payment Modal Overlay -->
+  <div
+    *ngIf="showCreateModal"
+    class="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/60 backdrop-blur-sm p-4"
+  >
+    <div class="bg-white rounded-xl shadow-2xl max-w-md w-full border border-slate-200 p-6 space-y-6">
+      <div class="flex items-center justify-between border-b border-slate-100 pb-4">
+        <h3 class="text-lg font-bold text-slate-800">Simulate Checkout Card Charge</h3>
+        <button (click)="showCreateModal = false" class="text-slate-400 hover:text-slate-600 text-xl font-bold">×</button>
+      </div>
+
+      <form [formGroup]="paymentForm" (ngSubmit)="onCreatePayment()" class="space-y-4">
+        <div class="grid grid-cols-2 gap-4">
+          <div>
+            <label class="block text-xs font-semibold uppercase text-slate-500 mb-2">Amount</label>
+            <input
+              type="number"
+              formControlName="amount"
+              class="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-lg text-sm text-slate-800 placeholder-slate-400 focus:outline-none focus:border-brand-500 focus:bg-white"
+              placeholder="99.00"
+            />
+          </div>
+          <div>
+            <label class="block text-xs font-semibold uppercase text-slate-500 mb-2">Currency</label>
+            <input
+              type="text"
+              formControlName="currency"
+              class="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-lg text-sm text-slate-800 placeholder-slate-400 focus:outline-none focus:border-brand-500 focus:bg-white uppercase"
+              placeholder="USD"
+            />
+          </div>
+        </div>
+
+        <div>
+          <label class="block text-xs font-semibold uppercase text-slate-500 mb-2">Card Number</label>
+          <input
+            type="text"
+            formControlName="cardNumber"
+            class="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-lg text-sm text-slate-800 placeholder-slate-400 focus:outline-none focus:border-brand-500 focus:bg-white font-mono"
+            placeholder="4242 4242 4242 4242"
+          />
+          <p class="text-slate-400 text-2xs mt-1">Use 4242... for approval; ending in 5555 to decline.</p>
+        </div>
+
+        <div class="grid grid-cols-3 gap-2">
+          <div class="col-span-2">
+            <label class="block text-xs font-semibold uppercase text-slate-500 mb-2">Expiry Date</label>
+            <input
+              type="text"
+              formControlName="cardExpiry"
+              class="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-lg text-sm text-slate-800 placeholder-slate-400 focus:outline-none focus:border-brand-500 focus:bg-white"
+              placeholder="12/28"
+            />
+          </div>
+          <div>
+            <label class="block text-xs font-semibold uppercase text-slate-500 mb-2">CVC</label>
+            <input
+              type="text"
+              formControlName="cardCvc"
+              class="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-lg text-sm text-slate-800 placeholder-slate-400 focus:outline-none focus:border-brand-500 focus:bg-white"
+              placeholder="123"
+            />
+          </div>
+        </div>
+
+        <div *ngIf="errorMessage" class="p-3 bg-red-50 text-red-600 text-xs rounded-lg border border-red-100">
+          {{ errorMessage }}
+        </div>
+
+        <div class="flex items-center gap-3 pt-4">
+          <button
+            type="button"
+            (click)="showCreateModal = false"
+            class="w-1/2 py-2.5 bg-slate-100 hover:bg-slate-200 text-slate-700 font-semibold rounded-lg text-sm"
+          >
+            Cancel
+          </button>
+          <button
+            type="submit"
+            [disabled]="paymentForm.invalid || isSubmitting"
+            class="w-1/2 py-2.5 bg-brand-600 hover:bg-brand-700 text-white font-semibold rounded-lg text-sm shadow disabled:opacity-50"
+          >
+            {{ isSubmitting ? 'Charging...' : 'Confirm Charge' }}
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Refund Modal Overlay -->
+  <div
+    *ngIf="showRefundModal"
+    class="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/60 backdrop-blur-sm p-4"
+  >
+    <div class="bg-white rounded-xl shadow-2xl max-w-md w-full border border-slate-200 p-6 space-y-6">
+      <div class="flex items-center justify-between border-b border-slate-100 pb-4">
+        <h3 class="text-lg font-bold text-slate-800">Issue Refund</h3>
+        <button (click)="showRefundModal = false" class="text-slate-400 hover:text-slate-600 text-xl font-bold">×</button>
+      </div>
+
+      <form [formGroup]="refundForm" (ngSubmit)="onRefund()" class="space-y-4">
+        <div class="p-3 bg-slate-50 rounded-lg text-xs space-y-1 text-slate-600">
+          <div><strong>Payment ID:</strong> {{ selectedPayment?.id }}</div>
+          <div><strong>Original Charge:</strong> $ {{ selectedPayment?.amount }}</div>
+        </div>
+
+        <div>
+          <label class="block text-xs font-semibold uppercase text-slate-500 mb-2">Refund Value</label>
+          <input
+            type="number"
+            formControlName="amount"
+            class="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-lg text-sm text-slate-800 focus:outline-none focus:border-brand-500 focus:bg-white"
+            placeholder="10.00"
+          />
+          <p class="text-slate-400 text-2xs mt-1">Can be partial or matching original charge size.</p>
+        </div>
+
+        <div>
+          <label class="block text-xs font-semibold uppercase text-slate-500 mb-2">Reason</label>
+          <input
+            type="text"
+            formControlName="reason"
+            class="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-lg text-sm text-slate-800 focus:outline-none focus:border-brand-500 focus:bg-white"
+            placeholder="Customer return request"
+          />
+        </div>
+
+        <div *ngIf="refundErrorMessage" class="p-3 bg-red-50 text-red-600 text-xs rounded-lg border border-red-100">
+          {{ refundErrorMessage }}
+        </div>
+
+        <div class="flex items-center gap-3 pt-4">
+          <button
+            type="button"
+            (click)="showRefundModal = false"
+            class="w-1/2 py-2.5 bg-slate-100 hover:bg-slate-200 text-slate-700 font-semibold rounded-lg text-sm"
+          >
+            Cancel
+          </button>
+          <button
+            type="submit"
+            [disabled]="refundForm.invalid || isRefundSubmitting"
+            class="w-1/2 py-2.5 bg-brand-600 hover:bg-brand-700 text-white font-semibold rounded-lg text-sm shadow disabled:opacity-50"
+          >
+            {{ isRefundSubmitting ? 'Refunding...' : 'Confirm Refund' }}
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>

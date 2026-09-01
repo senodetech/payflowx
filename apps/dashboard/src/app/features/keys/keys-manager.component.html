@@ -1,0 +1,69 @@
+<div class="space-y-8">
+  <!-- Title -->
+  <div>
+    <h1 class="text-2xl font-bold text-slate-800">API Credentials</h1>
+    <p class="text-slate-500 text-sm mt-1">Manage public and secret keys to authenticate your API integrations.</p>
+  </div>
+
+  <!-- Secret Key Warning / Display once -->
+  <div *ngIf="rotatedKeys" class="p-6 bg-amber-50 border border-amber-200 rounded-xl space-y-4">
+    <div class="flex items-start gap-3">
+      <span class="text-amber-600 font-bold text-lg">⚠️</span>
+      <div>
+        <h4 class="font-bold text-amber-800">Save your Secret API Key</h4>
+        <p class="text-xs text-amber-600 mt-1">For security, this secret key is only visible once. Copy and store it securely.</p>
+      </div>
+    </div>
+
+    <div class="flex flex-col gap-2 font-mono text-xs bg-white border border-amber-100 p-4 rounded-lg">
+      <div><strong>Public Key:</strong> {{ rotatedKeys.publicKey }}</div>
+      <div class="flex items-center justify-between gap-4 mt-2">
+        <div><strong>Secret Key:</strong> <span class="bg-amber-100/50 px-1 py-0.5 rounded text-amber-900 font-bold">{{ rotatedKeys.secretKey }}</span></div>
+        <button
+          (click)="copyToClipboard(rotatedKeys.secretKey)"
+          class="bg-slate-100 hover:bg-slate-200 text-slate-700 px-3 py-1.5 rounded font-sans font-semibold text-xs"
+        >
+          {{ copiedText ? 'Copied!' : 'Copy' }}
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Active Keys List Card -->
+  <div class="bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden p-6 space-y-6">
+    <div class="flex items-center justify-between">
+      <h3 class="text-lg font-bold text-slate-800">Standard API Keys</h3>
+      <button
+        (click)="onRotateKeys()"
+        [disabled]="isRotating"
+        class="bg-brand-600 hover:bg-brand-700 text-white font-semibold px-4 py-2.5 rounded-lg text-sm transition-colors disabled:opacity-50"
+      >
+        {{ isRotating ? 'Generating...' : 'Rotate API Keys' }}
+      </button>
+    </div>
+
+    <div class="space-y-4">
+      <div *ngFor="let key of store.keys()" class="flex flex-col md:flex-row md:items-center justify-between p-4 bg-slate-50 border border-slate-200 rounded-lg gap-4">
+        <div class="space-y-1">
+          <span class="text-2xs font-semibold text-slate-400 uppercase tracking-wider">Public Key Token</span>
+          <div class="font-mono text-xs text-slate-700 select-all">{{ key.publicKey }}</div>
+        </div>
+
+        <div class="flex items-center gap-6">
+          <div class="text-right">
+            <span class="text-2xs font-semibold text-slate-400 uppercase tracking-wider block">Status</span>
+            <span class="text-xs font-semibold text-green-600 uppercase">{{ key.status }}</span>
+          </div>
+          <div class="text-right">
+            <span class="text-2xs font-semibold text-slate-400 uppercase tracking-wider block">Created</span>
+            <span class="text-xs text-slate-500">{{ key.createdAt | date: 'shortDate' }}</span>
+          </div>
+        </div>
+      </div>
+
+      <div *ngIf="store.keys().length === 0" class="text-center py-6 text-slate-400 text-sm">
+        No active API credentials found. Click 'Rotate API Keys' to build a pair.
+      </div>
+    </div>
+  </div>
+</div>
