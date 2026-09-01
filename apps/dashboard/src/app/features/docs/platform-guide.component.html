@@ -1,0 +1,127 @@
+<div class="space-y-10 max-w-5xl">
+  <!-- Title Header -->
+  <div class="border-b border-slate-200 pb-6">
+    <div class="flex items-center gap-3">
+      <h1 class="text-3xl font-extrabold text-slate-800">Platform User Guide & Operational Manual</h1>
+      <span class="bg-indigo-50 text-indigo-700 text-xs font-bold px-3 py-1 rounded-full uppercase tracking-wider border border-indigo-200">
+        How to Use
+      </span>
+    </div>
+    <p class="text-slate-500 text-base mt-2">
+      Step-by-step operational workflows for merchants, finance managers, and platform administrators.
+    </p>
+  </div>
+
+  <!-- Interactive Workflow Steps -->
+  <div class="space-y-8">
+    <!-- Step 1 -->
+    <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm space-y-4">
+      <div class="flex items-start gap-4">
+        <div class="w-10 h-10 rounded-xl bg-brand-50 text-brand-600 font-bold flex items-center justify-center shrink-0 text-lg border border-brand-100">
+          1
+        </div>
+        <div class="space-y-2">
+          <h3 class="text-lg font-bold text-slate-800">Step 1: Onboarding & API Keys Provisioning</h3>
+          <p class="text-slate-600 text-sm leading-relaxed">
+            Every merchant organization registered in PayFlowX is provisioned with a secure API key pair.
+          </p>
+          <ul class="list-disc list-inside text-xs text-slate-600 space-y-1.5 ml-2">
+            <li>Navigate to the <strong class="text-slate-800">API Keys</strong> page from the sidebar menu.</li>
+            <li>Click <strong class="text-slate-800">Rotate API Key Pair</strong> whenever credentials need to be refreshed or revoked.</li>
+            <li>Copy your <code class="bg-slate-100 px-1 py-0.5 rounded font-mono">Secret Key</code> immediately; PayFlowX only stores one-way cryptographic SHA-256 hashes of secret keys in PostgreSQL.</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <!-- Step 2 -->
+    <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm space-y-4">
+      <div class="flex items-start gap-4">
+        <div class="w-10 h-10 rounded-xl bg-emerald-50 text-emerald-600 font-bold flex items-center justify-center shrink-0 text-lg border border-emerald-100">
+          2
+        </div>
+        <div class="space-y-2">
+          <h3 class="text-lg font-bold text-slate-800">Step 2: Simulating Checkout Charges & Card Processing</h3>
+          <p class="text-slate-600 text-sm leading-relaxed">
+            Test and simulate high-throughput card payments with instant ledger synchronization.
+          </p>
+          <ul class="list-disc list-inside text-xs text-slate-600 space-y-1.5 ml-2">
+            <li>Navigate to <strong class="text-slate-800">Payments</strong> in the sidebar.</li>
+            <li>Click <strong class="text-slate-800">Create Charge</strong> in the top-right corner.</li>
+            <li>Enter the target charge amount (e.g. <code class="bg-slate-100 px-1 py-0.5 rounded font-mono">$150.00 USD</code>) and test card number <code class="bg-slate-100 px-1 py-0.5 rounded font-mono">4242 4242 4242 4242</code>.</li>
+            <li>Upon submission, the payment state transitions to <code class="text-emerald-700 bg-emerald-50 px-1 py-0.5 rounded font-semibold">SUCCEEDED</code>, and the double-entry ledger automatically credits Merchant Revenue and debits Gateway Receivables.</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <!-- Step 3 -->
+    <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm space-y-4">
+      <div class="flex items-start gap-4">
+        <div class="w-10 h-10 rounded-xl bg-blue-50 text-blue-600 font-bold flex items-center justify-center shrink-0 text-lg border border-blue-100">
+          3
+        </div>
+        <div class="space-y-2">
+          <h3 class="text-lg font-bold text-slate-800">Step 3: Webhook Registration & Signature Verification</h3>
+          <p class="text-slate-600 text-sm leading-relaxed">
+            Configure real-time asynchronous HTTP event notifications for transaction states.
+          </p>
+          <ul class="list-disc list-inside text-xs text-slate-600 space-y-1.5 ml-2">
+            <li>Go to <strong class="text-slate-800">Webhooks</strong> and input your server's endpoint HTTPS URL.</li>
+            <li>Check off the events to listen to (<code class="bg-slate-100 px-1 py-0.5 rounded font-mono">payment.succeeded</code>, <code class="bg-slate-100 px-1 py-0.5 rounded font-mono">refund.succeeded</code>).</li>
+            <li>Monitor delivery status, HTTP response status codes, and retry counts directly in the live delivery audit table.</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <!-- Step 4 -->
+    <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm space-y-4">
+      <div class="flex items-start gap-4">
+        <div class="w-10 h-10 rounded-xl bg-purple-50 text-purple-600 font-bold flex items-center justify-center shrink-0 text-lg border border-purple-100">
+          4
+        </div>
+        <div class="space-y-2">
+          <h3 class="text-lg font-bold text-slate-800">Step 4: Executing Refunds & Balanced Accounting Audits</h3>
+          <p class="text-slate-600 text-sm leading-relaxed">
+            Execute partial or full customer refunds with mathematically balanced ledger entries.
+          </p>
+          <ul class="list-disc list-inside text-xs text-slate-600 space-y-1.5 ml-2">
+            <li>From the <strong class="text-slate-800">Payments</strong> table, locate a succeeded transaction and click <strong class="text-brand-600">Refund</strong>.</li>
+            <li>Enter the refund amount and customer reason.</li>
+            <li>The system executes the refund transaction, debits Merchant Settled Funds, and credits Customer Refund Accounts in the double-entry ledger without balance deviation.</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <!-- Step 5 -->
+    <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm space-y-4">
+      <div class="flex items-start gap-4">
+        <div class="w-10 h-10 rounded-xl bg-amber-50 text-amber-600 font-bold flex items-center justify-center shrink-0 text-lg border border-amber-100">
+          5
+        </div>
+        <div class="space-y-2">
+          <h3 class="text-lg font-bold text-slate-800">Step 5: Role-Based Access Control (RBAC) Hierarchy</h3>
+          <p class="text-slate-600 text-sm leading-relaxed">
+            PayFlowX enforces strict multi-tenant isolation and granular permission levels:
+          </p>
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-3 mt-3">
+            <div class="p-3 bg-purple-50 border border-purple-100 rounded-xl text-xs space-y-1">
+              <span class="font-bold text-purple-800 uppercase">1. Platform Admin</span>
+              <p class="text-purple-700">Access to system-wide health, merchant KYC approvals, global ledger balances, and user role adjustments.</p>
+            </div>
+            <div class="p-3 bg-blue-50 border border-blue-100 rounded-xl text-xs space-y-1">
+              <span class="font-bold text-blue-800 uppercase">2. Merchant Owner</span>
+              <p class="text-blue-700">Full ownership over merchant organization, API key rotation, issuing charges/refunds, and webhook configurations.</p>
+            </div>
+            <div class="p-3 bg-slate-50 border border-slate-200 rounded-xl text-xs space-y-1">
+              <span class="font-bold text-slate-800 uppercase">3. Developer / Auditor</span>
+              <p class="text-slate-600">Read-only transaction monitoring, API integration testing, and cryptographic log inspection.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
