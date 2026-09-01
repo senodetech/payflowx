@@ -1,0 +1,67 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: payflowx
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: payflowx-config
+  namespace: payflowx
+data:
+  NODE_ENV: "production"
+  DB_HOST: "postgres-service.payflowx.svc.cluster.local"
+  DB_PORT: "5432"
+  DB_NAME: "payflowx"
+  REDIS_HOST: "redis-service.payflowx.svc.cluster.local"
+  REDIS_PORT: "6379"
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: payflowx-secrets
+  namespace: payflowx
+type: Opaque
+data:
+  DB_USERNAME: cG9zdGdyZXM= # postgres in base64
+  DB_PASSWORD: cm9vdA== # root in base64
+  JWT_ACCESS_SECRET: c3VwZXJfc2VjcmV0X2FjY2Vzc19rZXlfMTIzX2FiY194eXo=
+  JWT_REFRESH_SECRET: c3VwZXJfc2VjcmV0X3JlZnJlc2hfa2V5XzQ1Nl9sbW5fb3Bx
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: payflowx-api
+  namespace: payflowx
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: payflowx-api
+  template:
+    metadata:
+      labels:
+        app: payflowx-api
+    spec:
+      containers:
+      - name: api
+        image: payflowx-api:latest
+        ports:
+        - containerPort: 3000
+        envFrom:
+        - configMapRef:
+            name: payflowx-config
+        - secretRef:
+            name: payflowx-secrets
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: payflowx-api-service
+  namespace: payflowx
+spec:
+  ports:
+  - port: 80
+    targetPort: 3000
+  selector:
+    app: payflowx-api
